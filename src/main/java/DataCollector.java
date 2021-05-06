@@ -1,5 +1,6 @@
 import org.jsoup.nodes.Document;
 
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,7 +16,7 @@ public class DataCollector {
 
     public String collect(Document doc, String url) {
         String page = doc.body().text();
-        StringBuilder strBuilder = new StringBuilder("");
+        StringBuilder strBuilder = new StringBuilder();
 
         int totalAmount = 0;
 
@@ -36,7 +37,7 @@ public class DataCollector {
         return strBuilder.toString();
     }
 
-    public Map<String, Integer> getBestMatches() {
+    public List<Map.Entry<String, Integer>> getBestMatches() {
         return statistics.getBestMatches();
     }
 }

@@ -5,11 +5,13 @@ import org.jsoup.nodes.Element;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class Crawler {
     private static int pageAmount = 0;
-    private int maxDepth = 8, pageLimit = 10_000;
+    private final int maxDepth;
+    private final int pageLimit;
     private final DataCollector collector;
 
 
@@ -59,7 +61,7 @@ public class Crawler {
         }
     }
 
-    public Map<String, Integer> getBestMatches() {
+    public List<Map.Entry<String, Integer>> getBestMatches() {
         return  collector.getBestMatches();
     }
 }
