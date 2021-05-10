@@ -1,11 +1,12 @@
+import com.opencsv.CSVWriter;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class Crawler {
@@ -13,9 +14,13 @@ public class Crawler {
     private final int maxDepth;
     private final int pageLimit;
     private final DataCollector collector;
+    CSVWriter writerAll = new CSVWriter(new FileWriter("allSites.csv"));
+    CSVWriter writerTOP = new CSVWriter(new FileWriter("TOPSites.csv"));
+    private final ArrayList<String> sitesWData = new ArrayList<>();
+    private final ArrayList<String> topSites = new ArrayList<>();
 
 
-    public Crawler(int maxDepth, int pageLimit, String[] terms, int topNReports) {
+    public Crawler(int maxDepth, int pageLimit, String[] terms, int topNReports) throws IOException {
         this.maxDepth = maxDepth;
         this.pageLimit = pageLimit;
         this.collector = new DataCollector(terms, topNReports);
@@ -52,6 +57,7 @@ public class Crawler {
             if(con.response().statusCode() == 200) {
                 String data = collector.collect(doc, url);
                 System.out.println("Link: " + url + "\t" + data);
+                sitesWData.add(url + "\t" + data);
                 v.add(url);
                 return doc;
             }
@@ -61,7 +67,22 @@ public class Crawler {
         }
     }
 
-    public List<Map.Entry<String, Integer>> getBestMatches() {
-        return  collector.getBestMatches();
+    public ArrayList<String> getBestMatches() {
+        for (Map.Entry<String, Integer> entry : collector.getBestMatches())
+        {
+            topSites.add(entry.getKey() + "\t" + entry.getValue());
+        }
+        return topSites;
+    }
+
+    public void CSVWriter() throws IOException {
+        String[] entries = sitesWData.toArray(new String[0]);
+        String[] topEntries = topSites.toArray(new String[0]);
+
+        writerAll.writeNext(entries);
+        writerAll.close();
+
+        writerTOP.writeNext(topEntries);
+        writerTOP.close();
     }
 }
