@@ -32,7 +32,7 @@ public class DataCollector {
             strBuilder.append(" ").append(count);
         }
 
-        strBuilder.append("\ntotal amount ").append(totalAmount);
+        strBuilder.append("\ttotal amount ").append(totalAmount);
         statistics.setAllLinks(url, totalAmount);
         return strBuilder.toString();
     }
